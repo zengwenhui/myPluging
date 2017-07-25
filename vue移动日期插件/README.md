@@ -1,5 +1,6 @@
 # self
-
+#日历选择 http://www.showonne.com/vue-date/dist/browser/     （vue）
+#日期选择  http://www.cnblogs.com/libin-1/p/5995481.html   （移动端）
 > first Vue Project
 
 ## Build Setup
