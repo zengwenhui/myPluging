@@ -92,5 +92,11 @@ export default {
  
   </div>
 </template>
+<style> 
+.container{
+  width:100%;
+  position:relative;
+}
+</style>
     
 

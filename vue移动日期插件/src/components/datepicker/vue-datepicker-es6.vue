@@ -28,7 +28,8 @@
                 <li v-for="weekie in library.week">{{weekie}}</li>
               </ul>
             </div>
-            <div class="day" v-for="day in dayList" track-by="$index" @click="checkDay(day)" :class="{'checked':day.checked,'unavailable':day.unavailable,'passive-day': !(day.inMonth)}" :style="day.checked ? (option.color && option.color.checkedDay ? { background: option.color.checkedDay } : { background: '#F50057' }) : {}">{{day.value}}</div>
+            <div class="day" v-for="day in dayList" track-by="$index"  @click="checkDay(day)" :class="{'checked':day.checked,'unavailable':day.unavailable,'passive-day': !(day.inMonth)}" :style="day.checked ? (option.color && option.color.checkedDay ? { background: option.color.checkedDay } : { background: '#F50057' }) : {}">{{day.value}}
+            </div>  
           </div>
         </div>
 
@@ -61,10 +62,10 @@
             </div>
           </div>
         </div>
-        <div class="button-box">
+        <!--<div class="button-box">
           <span @click="showInfo.check=false">{{option.buttons? option.buttons.cancel : 'Cancel' }}</span>
           <span @click="picked">{{option.buttons? option.buttons.ok : 'Ok'}}</span>
-        </div>
+        </div>-->
       </div>
    <!-- </div>
 -->
@@ -210,21 +211,21 @@ export default {
       } else {
         this.checked.currentMoment = moment(time, this.option.format)
       }
-      this.showOne('day')
+      this.showOne('day')   //显示天数
       this.checked.year = moment(this.checked.currentMoment).format('YYYY')
       this.checked.month = moment(this.checked.currentMoment).format('MM')
       this.checked.day = moment(this.checked.currentMoment).format('DD')
-      this.displayInfo.month = this.library.month[moment(this.checked.currentMoment).month()]
+      this.displayInfo.month = this.library.month[moment(this.checked.currentMoment).month()]  //头部header部分显示月份
       let days = []
       let currentMoment = this.checked.currentMoment
-      let firstDay = moment(currentMoment).date(1).day()
+      let firstDay = moment(currentMoment).date(2).day()   //返回日期对应的星期
       // gettting previous and next month
       // let currentMonth = moment(currentMoment)
       let previousMonth = moment(currentMoment)
       let nextMonth = moment(currentMoment)
-      nextMonth.add(1, 'months')
-      previousMonth.subtract(1, 'months')
-      let monthDays = moment(currentMoment).daysInMonth()
+      nextMonth.add(1, 'months')    //加上一个月
+      previousMonth.subtract(1, 'months')   //减去一个月
+      let monthDays = moment(currentMoment).daysInMonth()//返回这个月的天数
       let oldtime = this.checked.oldtime
       for (let i = 1; i <= monthDays; ++i) {
         days.push({
@@ -366,7 +367,7 @@ export default {
     },
     showOne (type) {
       switch (type) {
-        case 'year':
+        case 'year':   
           this.showInfo.hour = false
           this.showInfo.day = false
           this.showInfo.year = true
@@ -422,14 +423,12 @@ export default {
       this.checked.currentMoment = moment(this.checked.year + '-' + mo + '-' + this.checked.day)
       this.showDay(this.checked.currentMoment)
     },
-    showCheck () {
-      if (this.date.time === '') {
-       
+    showCheck () {           //初始化显示
+      if (this.date.time === '') {      //读值为空  显示天数
         this.showDay()
       } else {
-         console.log(1)
         if (this.option.type === 'day' || this.option.type === 'min') {
-          this.checked.oldtime = this.date.time
+          this.checked.oldtime = this.date.time      //记录进来的时间
           this.showDay(this.date.time)
         } else {
           this.selectedDays = JSON.parse(this.date.time)
@@ -441,7 +440,7 @@ export default {
           }
         }
       }
-      this.showInfo.check = true
+      this.showInfo.check = true //显示
     },
     setTime (type, obj, list) {
       for (let item of list) {
@@ -577,7 +576,7 @@ export default {
   -ms-box-sizing: border-box !important;
 
   width: 100%;
-  height: 280px;
+             
   text-align: start!important;
 }
 .cov-picker-box td {
@@ -601,12 +600,12 @@ table {
 .day {
   width: 14.2857143%;
   display: inline-block;
-  margin-top:5px; 
+  margin-top:12px; 
   text-align: center;
   cursor: pointer;
   height:calc(width);
   padding: 0;
-  line-height: 48px;
+  line-height: 38px;
   color: #000;
   background: #fff;
   vertical-align: middle;

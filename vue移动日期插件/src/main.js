@@ -3,8 +3,10 @@
 import Vue from 'vue'
 import MintUI from 'mint-ui'
 // import vuex from 'vuex'
+import "./flexible"
 import App from './App'
 import router from './router'
+
 Vue.config.productionTip = false //关闭vue2.0调试输出信息
 
 Vue.use(MintUI);
