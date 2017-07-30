@@ -6,7 +6,7 @@ import MintUI from 'mint-ui'
 import "./flexible"
 import App from './App'
 import router from './router'
-
+import "./assets/vconsole"
 Vue.config.productionTip = false //关闭vue2.0调试输出信息
 
 Vue.use(MintUI);

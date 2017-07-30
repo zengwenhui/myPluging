@@ -1,7 +1,4 @@
 <template>
-
-  <div class="cov-vue-date">
-
    <!--- <div class="datepickbox">
       <input type="text" title="input date" class="cov-datepicker"  :placeholder="option.placeholder" v-model="date.time" :required="required" @click="showCheck" @foucus="showCheck" :style="option.inputStyle ? option.inputStyle : {}" />
     </div>-->
@@ -28,7 +25,7 @@
                 <li v-for="weekie in library.week">{{weekie}}</li>
               </ul>
             </div>
-            <div class="day" v-for="day in dayList" track-by="$index"  @click="checkDay(day)" :class="{'checked':day.checked,'unavailable':day.unavailable,'passive-day': !(day.inMonth)}" :style="day.checked ? (option.color && option.color.checkedDay ? { background: option.color.checkedDay } : { background: '#F50057' }) : {}">{{day.value}}
+            <div  v-for="day in dayList"  track-by="$index"  @click="checkDay(day,$event)" :class="{'day':day.moment,'inset':!day.moment,'checked':day.checked,'unavailable':day.unavailable,'passive-day': !(day.inMonth),'active-leave':day.type == '1','active-normal':day.type == '0','active-fail':day.type == '2','radius-l':(day.value !='' && day.isleft == '1'),'radius-r':(day.value != '' && day.isright == '1')}" >{{day.value}}
             </div>  
           </div>
         </div>
@@ -62,14 +59,7 @@
             </div>
           </div>
         </div>
-        <!--<div class="button-box">
-          <span @click="showInfo.check=false">{{option.buttons? option.buttons.cancel : 'Cancel' }}</span>
-          <span @click="picked">{{option.buttons? option.buttons.ok : 'Ok'}}</span>
-        </div>-->
       </div>
-   <!-- </div>
--->
-  </div>
 </template>
 <script>
 import moment from 'moment'
@@ -82,6 +72,7 @@ export default {
       type: Object,
       required: true
     },
+    show:Object,
     option: {
       type: Object,
       default () {
@@ -95,24 +86,7 @@ export default {
             checked: '#F50057',
             header: '#3f51b5',
             headerText: '#fff'
-          },
-          inputStyle: {
-            'display': 'inline-block',
-            'padding': '6px',
-            'line-height': '22px',
-            'font-size': '16px',
-            'border': '2px solid #fff',
-            'box-shadow': '0 1px 3px 0 rgba(0, 0, 0, 0.2)',
-            'border-radius': '2px',
-            'color': '#5F5F5F'
-          },
-          placeholder: 'when?',      
-          buttons: {
-            ok: 'OK',
-            cancel: 'Cancel'
-          },
-          overlayOpacity: 0.5,
-          dismissible: true
+          }
         }
       }
     },
@@ -149,6 +123,7 @@ export default {
       return list
     }
     return {
+      activeDom:null,    //日历被选择元素的dom对象   只能选中一个元素
       hours: hours(),
       mins: mins(),
       showInfo: {
@@ -183,14 +158,16 @@ export default {
     dismissflag (bool) {
       console.log(bool)
           if(bool){
-              this.date.time = this.sendDate;
-              this.option.type = 'day'
-              this.showCheck();
-              console.log(1)
+             
           }else{
 
           }
     }
+  },
+  mounted(){
+     this.date.time = this.sendDate;
+              this.option.type = 'day'
+              this.showCheck();
   },
   methods: {
     pad (n) {
@@ -205,7 +182,6 @@ export default {
      // 讲传进来的时间转换成一个月的天数的基本day对象（time格式为2017-07-07）
     showDay (time) {              
       console.log(time)
-      console.log("showDay")
       if (time === undefined || !Date.parse(time)) {
         this.checked.currentMoment = moment()
       } else {
@@ -230,7 +206,7 @@ export default {
       for (let i = 1; i <= monthDays; ++i) {
         days.push({
           value: i,
-          inMonth: true,
+          inMonth: true,        //是否是当月
           unavailable: false,
           checked: false,
           moment: moment(currentMoment).date(i)
@@ -277,8 +253,94 @@ export default {
         days.push(passiveDay)
       }
       console.log(days)
+      days = this.insertDom(days)
+      this.insertAttr(days)
       console.log("showDay")
       this.dayList = days
+    },
+    insertDom(dataList){        //添加处理数据 author: Zeng
+      let arr = [];
+        dataList.forEach(function(item,index){
+          if(index%7 != 6){
+            arr.push(item);
+            arr.push({place:"true",moment:false,value:"",inMonth:false})
+          }else{
+           arr.push(item);
+          }
+        })
+        console.log(arr)
+        return arr;
+    },
+    insertAttr(dataList){   //author：Zeng   渲染添加样式
+      dataList.forEach((item,index)=>{
+        
+        if(!item.inMonth && item.value != ""){   //非本月day样式
+          item.isleft = 0;
+          item.isright = 0;
+          item.type = "4";
+        }else{
+          if(item.value == ""){   //空白处理
+          }else{                  //渲染本月颜色
+              item.type = this.show.child[item.value-1].type;
+          }
+        }
+      })
+      dataList.forEach(function(item,index){
+          if(item.value == ""){
+              let l = dataList[index-1].type ;
+              let r = dataList[index+1].type ;
+              if(l <= 2 && r <=2 ){
+                if(l == r){
+                  item.type = l;
+                }else{
+                  item.type = "5"
+                  item.isleft = 1;
+                  item.isright = 1;
+                }
+              }else{
+                item.type = "5";
+                if(l <= 2){
+                   item.isleft = 1;
+                   item.isright = 0;
+                }else{
+                  if(r <= 2){
+                    item.isright = 1;
+                    item.isleft = 0 ;
+                  }else{
+                    item.isright = 0;
+                    item.isleft = 0;
+                  }
+                }
+              }
+          }
+      })
+      dataList.forEach(function(item,index){
+         if(item.value != "" && item.inMonth){
+              var day = moment(item.moment).day()   //取星期
+              if(day%7 != 0){           //非星期日
+                  item.isleft = dataList[index-1].isright;
+                  if(day%7 != 6){      //星期六
+                      item.isright= dataList[index+1].isleft;
+                  }else{
+                      if(item.type <= 2){
+                         item.isright = 1;
+                      }else{
+                         item.isright = 0;
+                      }
+                  }
+              }else{                    //星期日
+                 if(item.type <= 2){
+                    item.isleft = 1;
+                    item.isright = dataList[index+1].isleft;
+                 }else{
+                   item.isleft = 0;
+                   item.isright = 0;
+                 }
+              }
+          }
+      })
+      console.log(dataList)
+      console.log(1)
     },
     checkBySelectDays (d, days) {
       this.selectedDays.forEach(day => {
@@ -315,7 +377,38 @@ export default {
         return !tmpMoment.isBetween(limit.from, limit.to)
       }
     },
-    checkDay (obj) {
+    createDom(dom){
+      var wid = dom.clientWidth;
+      var hei = dom.clientHeight;
+      var innerT = dom.innerText;
+      if(this.activeDom){        //删除上一次选中的dom元素
+        var parents = this.activeDom.parentNode;
+        parents.removeChild(this.activeDom)
+      }
+      this.activeDom = document.createElement('div');
+      var child = this.activeDom;
+      // child.style.width = wid + "px" ;
+      // child.style.height = hei +"px";
+      // child.style.position = ""
+      // child.style.top = "0"
+      child.innerHTML = innerT;
+      var str  = "top:0;position:absolute;width:"+wid+"px;height:"+hei+"px;background-color:red;border-radius:50%;"
+      child.style.cssText = str;
+      dom.appendChild(child)
+      console.log(child)
+    },
+    checkDay (obj,e) {
+      this.$emit('tag',obj)
+      if( obj.value === ''){   //排除相邻二个日子之间的空格
+        return false;
+      }
+     
+      if(!obj.inMonth){
+        return false;
+      }
+       this.createDom(e.target)
+      
+      console.log("11")
       if (obj.unavailable || obj.value === '') {
         return false
       }
@@ -554,15 +647,9 @@ export default {
   font-size: 16px;
   font-family: 'Roboto';
   font-weight: 400;
-  position: fixed;
   display: block;
    width: 100%;
-  z-index: 999;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
+
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 }
 .cov-picker-box {
@@ -598,9 +685,24 @@ table {
   width: 100%;
 }
 .day {
-  width: 14.2857143%;
+  /*width: 14.2857143%;*/
+  width:10%;
   display: inline-block;
   margin-top:12px; 
+  text-align: center;
+  position:relative;
+  height:38px;
+  padding: 0;
+  line-height: 38px;
+  color: #000;
+  background: #fff;
+  vertical-align: middle;
+}
+.inset{
+  width:5%;
+  display: inline-block;
+  margin-top:12px; 
+  height:38px;
   text-align: center;
   cursor: pointer;
   height:calc(width);
@@ -629,7 +731,7 @@ table {
 .checked {
   background: #F50057;
   color: #FFF !important;
-  border-radius: 50%;
+  /*border-radius: 50%;*/
 }
 .unavailable {
   color: #ccc;
@@ -671,7 +773,7 @@ table {
   background: rgba(255, 255, 255, 0.1);
 }
 .day:hover {
-  background: #EAEAEA;
+  /*background: #EAEAEA;*/
 }
 .unavailable:hover {
   background: none;
@@ -796,5 +898,23 @@ table {
 ::-webkit-scrollbar-thumb {
   background: #C1C1C1;
   border-radius: 2px;
+}
+/*自定义添加*/
+.radius-l{        /*切左边*/
+  border-top-left-radius:50% !important;
+  border-bottom-left-radius:50% !important;
+}
+.radius-r{      /*切右边*/
+  border-top-right-radius:50% !important;
+  border-bottom-right-radius:50% !important;
+}
+.active-leave{      /*请假1*/
+  background-color:	#FFD700 !important;
+}
+.active-normal{     /*正常0*/
+  background:#32CD32 !important;
+}
+.active-fail{      /*旷工2*/
+  background-color:	#F08080 !important;
 }
 </style>
