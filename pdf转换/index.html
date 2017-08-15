@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>pdf文档转化</title>
+</head>
+<style>
+    .container {
+        width: 300px;
+    }
+</style>
+<script src="./pdf.js"></script>
+<script src="./viewer.js"></script>
+<body>
+        <canvas id="the-canvas" style="border:1px solid black;"></canvas>
+</body>
+<script>
+    PDFJS.getDocument('https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf').then(function(pdf) {
+        //用 promise 获取页面
+        pdf.getPage(1).then(function(page) {
+            var scale = 1.5;
+            var viewport = page.getViewport(scale);
+
+            //
+            //  准备用于渲染的 canvas 元素
+            //
+            var canvas = document.getElementById('the-canvas');
+            var context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            //
+            // 将 PDF 页面渲染到 canvas 上下文中
+            //
+            var renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+            page.render(renderContext);
+        });
+    });
+</script>
+
+</html>
