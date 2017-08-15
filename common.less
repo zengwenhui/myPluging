@@ -1,0 +1,279 @@
+html{color:#333;overflow-y:scroll;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}html *{outline:0;-webkit-text-size-adjust:none;-webkit-tap-highlight-color:transparent}body,html{font-family:arial}article,aside,blockquote,body,button,code,dd,details,div,dl,dt,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,hr,input,legend,li,menu,nav,ol,p,pre,section,td,textarea,th,ul{margin:0;padding:0}input,select,textarea{font-size:100%}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}abbr,acronym{border:0;font-variant:normal}del{text-decoration:line-through}address,caption,cite,code,dfn,em,th,var{font-style:normal;font-weight:500}ol,ul{list-style:none}caption,th{text-align:left}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:500}q:after,q:before{content:''}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}a,a:hover{text-decoration:none}
+
+body{
+    background-color :#fff;
+    font-family: 'Microsoft Yahei',"arial";
+}
+.app{
+    height:100vh;
+    overflow:hidden;
+}
+@sfRed: #FD545B;
+.container{
+    overflow-y: auto;
+    position: relative;
+    padding-top:1.1733rem;
+    width: 100%;
+    // height:-moz-calc(~"100vh - 46px");
+    // height:-webkit-calc(~"100vh - 46px");
+    // height: calc(~"100vh - 46px");
+    height:100%;
+    box-sizing: border-box;
+}
+.mint-header{
+    position:fixed;
+    left:0;right:0;
+    font-size: 0.4533rem;
+    height: 1.1733rem;
+    line-height: 1.1733rem;
+    color: #fff;
+    background-color:#25252e;
+    h1{
+        font-size: 0.4533rem;
+    }
+    .mint-button{
+    height: 1.1733rem;
+    line-height: 1.1733rem;
+    }
+    .mintui-back{
+        font-size: 0.4533rem;
+        margin-right: -5px;
+    }
+}
+.mint-toast{
+    min-width: 30%;
+}
+.mint-msgbox-btn{
+    font-size: 1em;
+}
+.sf-reset{
+    .mint-msgbox-confirm{
+        color: @sfRed;
+    }
+}
+a:hover {
+    text-decoration: none;
+}
+
+a,
+ins {
+    text-decoration: none;
+    color: #2e2e33;
+}
+footer {
+    height: 50px;
+    border-top:1px solid #C0BFC4; 
+    right: 0;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    z-index: 1;
+    display: -webkit-box;
+    display: box;
+    display: flex;
+    text-align: center;
+    background-color: #f7f7fa;
+    .tab-item {
+        display: block;
+        position: relative;
+        padding: 4px 0 3px 0;
+        -webkit-box-flex: 1;
+        box-flex: 1;
+        flex: 1;
+        width: 100%;
+        text-align: center;
+        font-size: 12px;
+        line-height: 14px;
+        color: #000;
+        .icon {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+        }
+        .one {
+            background: url("../assets/icon_tabbar.png") no-repeat center;
+            background-size: contain;
+        }
+        &.router-link-active {
+            color: @sfRed;
+            .one {
+                background: url("../assets/icon_tabbar.png") no-repeat center;
+                background-size: contain;
+            }
+        }
+    }
+}
+
+//时间弹出框
+.mint-popup-time .time-toolbar,
+.picker-toolbar{
+    background-color: #f1f0f0;
+    color: #4a4a4a;
+    padding: 0 15px;
+    display: flex;
+    justify-content: space-between;
+}
+//messgebox 确定按钮 字体颜色
+.mint-msgbox-confirm,
+.mint-msgbox-confirm:active{
+    color: #F46060;
+}
+
+.mint-toast{
+    z-index: 9999 !important;
+}
+//公共样式的提取
+.flexStyle{             
+    display: box;              /* OLD - Android 4.4- */
+    display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox;      /* TWEENER - IE 10 */
+    display: -webkit-flex;     /* NEW - Chrome */
+    display: flex;
+
+    /* 12版 */
+	-webkit-flex-direction: row;
+	-moz-flex-direction: row;
+	-ms-flex-direction: row;
+	-o-flex-direction: row;
+	flex-direction:row;
+}
+html .flexColumn{
+         -webkit-box-orient: vertical;
+    	 /* 12版 */
+		  -webkit-flex-direction: column;
+		  -moz-flex-direction: column;
+		  -ms-flex-direction:column;
+		  -o-flex-direction: column;
+	      flex-direction:column;
+}
+html .justifyCenter{
+		  /* 12版 */
+          -webkit-box-pack: center;
+		  -webkit-justify-content: center;
+		  -moz-justify-content: center;
+		  -ms-justify-content: center;
+		  -o-justify-content: center;
+	      justify-content: center;
+
+}
+html .justifySpace{
+        -webkit-box-pack: justify;  
+		  -webkit-justify-content: space-between ;
+          -ms-flex-pack: justify;
+		  -moz-justify-content: space-between ;
+		  -ms-justify-content: space-between ;
+		  -o-justify-content: space-between ;
+	      justify-content: space-between ;
+
+}
+html .alignCenter{
+    		  /* 12版 */
+          -webkit-box-align: center;
+          box-align:center;
+		  -webkit-align-items: center;
+		  -moz-align-items: center;
+		  -ms-align-items: center;
+		  -o-align-items: center;
+	      align-items: center;
+}
+html .flex-1 {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+
+//以下是flex布局的兼容写法
+// .flex {
+//     display: -webkit-box;
+//     display: -webkit-flex;
+//     display: -ms-flexbox;
+//     display: flex;
+// }
+
+// .flex-v {
+//     -webkit-box-orient: vertical;
+//     -webkit-flex-direction: column;
+//     -ms-flex-direction: column;
+//     flex-direction: column;
+// }
+
+// .flex-1 {
+//     -webkit-box-flex: 1;
+//     -webkit-flex: 1;
+//     -ms-flex: 1;
+//     flex: 1;
+// }
+
+// .flex-align-center {
+//     -webkit-box-align: center;
+//     -webkit-align-items: center;
+//     -ms-flex-align: center;
+//     align-items: center;
+// }
+
+// .flex-pack-center {
+//     -webkit-box-pack: center;
+//     -webkit-justify-content: center;
+//     -ms-flex-pack: center;
+//     justify-content: center;
+// }
+
+// .flex-pack-justify {
+//     -webkit-box-pack: justify;
+//     -webkit-justify-content: space-between;
+//     -ms-flex-pack: justify;
+//     justify-content: space-between;
+// }
+//全局的运动css
+.animated {
+    -webkit-animation-duration: 0.7s;
+    animation-duration: 0.7s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both
+}
+@-webkit-keyframes fadeIns {
+    0% {
+        opacity: 0.76
+    }
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes fadeIns {
+    0% {
+        opacity: 0.76
+    }
+    to {
+        opacity: 1
+    }
+}
+
+.fadeIns {
+    -webkit-animation-name: fadeIns;
+    animation-name: fadeIns
+}
+@-webkit-keyframes fadeOuts {
+    0% {
+        opacity: 1
+    }
+    to {
+        opacity: 0
+    }
+}
+
+@keyframes fadeOuts {
+    0% {
+        opacity: 1
+    }
+    to {
+        opacity: 0
+    }
+}
+
+.fadeOuts {
+    -webkit-animation-name: fadeOuts;
+    animation-name: fadeOuts
+}
