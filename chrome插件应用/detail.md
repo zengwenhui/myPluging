@@ -4,3 +4,5 @@ Vue.js devtools
 Allow-Control-Allow-Origin
 #angular开发者工具
 AngularJS Batarang
+#json数据格式化
+JSON Formatter
