@@ -28,7 +28,6 @@ export default {
       timeoption: {
         type: 'min',
         week: ['日', '一', '二', '三', '四', '五', '六'],
-        month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         format: 'YYYY-MM-DD HH:mm'
       },
       multiOption: {
@@ -41,7 +40,7 @@ export default {
         type: 'weekday',
         available: [0,1, 2, 3, 4, 5, 6, ]         
       },
-      {
+       {
         type: 'fromto',
         from: '2016-1-1',                        //切割起点
         to: '2019-02-20'                //切割到什么日期

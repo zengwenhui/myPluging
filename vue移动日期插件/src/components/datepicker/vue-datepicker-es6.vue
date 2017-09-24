@@ -53,6 +53,7 @@
                 </ul>
               </div>
               <div class="min-box">
+                  div>p
                 <div class="mui-pciker-rule mui-pciker-rule-ft"></div>
                 <div class="min-item" v-for="mitem in mins" @click="setTime('min',mitem, mins)" :class="{'active':mitem.checked}">{{mitem.value}}</div>
               </div>
